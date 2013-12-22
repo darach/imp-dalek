@@ -1,0 +1,62 @@
+imp.configure("Dalek v1", [], []);
+
+// Map GPIO pins 
+l_fwd <- hardware.pin1;
+l_bwd <- hardware.pin2;
+r_fwd <- hardware.pin5;
+r_bwd <- hardware.pin7;
+
+// Set all pins to output 
+l_fwd.configure(DIGITAL_OUT);
+l_bwd.configure(DIGITAL_OUT);
+r_fwd.configure(DIGITAL_OUT);
+r_bwd.configure(DIGITAL_OUT);
+ 
+// Set opto-coupler array high or low
+function setPin(state) {
+  server.log("Pin state: " + state);
+
+  // Full stop 
+  if (state == 0) {
+    l_fwd.write(0);
+    l_bwd.write(0)
+    r_fwd.write(0);
+    r_bwd.write(0)
+  } 
+
+  // Left forward (turn right) 
+  if (state == 1) {
+    l_fwd.write(1);
+    l_bwd.write(0)
+    r_fwd.write(0);
+    r_bwd.write(0)
+  } 
+ 
+  // Right forward (turn left) 
+  if (state == 2) {
+    l_fwd.write(0);
+    l_bwd.write(0)
+    r_fwd.write(1);
+    r_bwd.write(0)
+  } 
+
+  // Full forward 
+  if (state == 3) {
+    l_fwd.write(1);
+    l_bwd.write(0)
+    r_fwd.write(1);
+    r_bwd.write(0)
+  } 
+
+  // Full reverse 
+  if (state == 4) {
+    l_fwd.write(0);
+    l_bwd.write(1)
+    r_fwd.write(0);
+    r_bwd.write(1)
+  } 
+}
+ 
+// register a handler for "pin" messages from the agent
+agent.on("pins", setPin);
+

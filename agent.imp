@@ -1,0 +1,16 @@
+// Electric IMP agent to control hacked Dalek toy
+//
+
+server.log("daleks, yo.")
+ 
+function requestHandler(request, response) {
+  try {
+    if ("pins" in request.query) {
+        local pinState = request.query.pins.tointeger();
+        device.send("pins", pinState); 
+    }
+    response.send(200, "OK");
+  } catch (ex) {
+    response.send(500, "Internal Server Error: " + ex);
+  }
+}
